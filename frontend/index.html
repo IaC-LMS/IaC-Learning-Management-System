@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Crear Tarea - MVP LMS</title>
+</head>
+<body>
+  <h1>Crear Tarea (MVP)</h1>
+  <form id="taskForm">
+    <label>Título:<br><input id="title" required></label><br><br>
+    <label>Descripción:<br><textarea id="description"></textarea></label><br><br>
+    <label>Creado por:<br><input id="createdBy" required></label><br><br>
+    <button type="submit">Crear tarea</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    document.getElementById('taskForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        title: document.getElementById('title').value,
+        description: document.getElementById('description').value,
+        createdBy: document.getElementById('createdBy').value
+      };
+      try {
+        const resp = await fetch('/api/tasks', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const data = await resp.json();
+        document.getElementById('result').innerText = JSON.stringify(data);
+      } catch (err) {
+        document.getElementById('result').innerText = 'Error: '+err;
+      }
+    });
+  </script>
+</body>
+</html>
