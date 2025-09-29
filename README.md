@@ -192,8 +192,11 @@ ansible-playbook playbook.yaml -i inventario.ini
 
 ## 👥 Autores
 
-* **Nombre del Estudiante** – Universidad Privada Antenor Orrego
-* Curso: *[Indicar curso]*
-* Docente: *[Nombre del docente]*
+* **Universidad Privada Antenor Orrego** 
+* Curso: *Infraestructura como codigo*
+* Integrantes:
+    - Eustaquio Avila, Joel
+    - Vergara López, Junior
+    - Zumaeta Rodriguez Jeremy
 * Año: 2025
 
