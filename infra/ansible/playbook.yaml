@@ -1,0 +1,56 @@
+---
+- name: Configuración del LMS para enviar notificaciones SNS
+  hosts: all
+  become: yes
+  tasks:
+
+    - name: Instalar AWS CLI
+      apt:
+        name: awscli
+        state: present
+      when: ansible_facts['distribution'] == "Ubuntu"
+
+    - name: Configurar AWS CLI con credenciales
+      aws_configure:
+        region: "us-east-1"
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+      no_log: true
+
+    - name: Crear un topic de SNS para notificaciones
+      aws_sns_topic:
+        name: "Tarea_Notificaciones"
+        state: present
+        region: "us-east-1"
+      register: sns_topic
+
+    - name: Crear una suscripción para los estudiantes en SNS
+      aws_sns_subscription:
+        protocol: "email"
+        endpoint: "{{ student_email }}"
+        topic_arn: "{{ sns_topic.topic_arn }}"
+        region: "us-east-1"
+      when: sns_topic is defined
+
+    - name: Desplegar la aplicación backend (si es necesario)
+      git:
+        repo: 'https://github.com/IaC-LMS/IaC-Learning-Management-System.git'
+        dest: '/home/ubuntu/lms_backend'      
+        version: 'main'
+
+    - name: Instalar dependencias backend
+      command:
+        cmd: "npm install"
+        chdir: "/home/ubuntu/lms_backend"
+      when: sns_topic is defined
+
+    - name: Configurar el backend para usar SNS
+      template:
+        src: "config_sns_template.j2"
+        dest: "/home/ubuntu/lms_backend/config.json"
+
+    - name: Reiniciar el backend
+      service:
+        name: "lms_backend"
+        state: restarted
+      when: sns_topic is defined

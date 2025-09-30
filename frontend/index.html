@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear Tarea - MVP LMS</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #4CAF50;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    label {
+      font-size: 16px;
+      color: #333;
+    }
+
+    input, textarea {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 100%;
+    }
+
+    textarea {
+      height: 100px;
+      resize: vertical;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #result {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f1f1f1;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Crear Tarea (MVP)</h1>
+    <form id="taskForm">
+      <label for="title">Título:</label>
+      <input id="title" type="text" required>
+      
+      <label for="description">Descripción:</label>
+      <textarea id="description"></textarea>
+      
+      <label for="createdBy">Creado por:</label>
+      <input id="createdBy" type="text" required>
+      
+      <button type="submit">Crear tarea</button>
+    </form>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    document.getElementById('taskForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        title: document.getElementById('title').value,
+        description: document.getElementById('description').value,
+        createdBy: document.getElementById('createdBy').value
+      };
+      try {
+        const resp = await fetch('/api/tasks', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const data = await resp.json();
+        document.getElementById('result').innerText = JSON.stringify(data, null, 2);
+      } catch (err) {
+        document.getElementById('result').innerText = 'Error: ' + err;
+      }
+    });
+  </script>
+</body>
+</html>
