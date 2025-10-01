@@ -1,21 +1,57 @@
-# 📚 Proyecto IaC para LMS
+# 📚 Proyecto IaC para LMS: IaC-Learning-Management-System
 
-Este repositorio contiene la infraestructura como código (**IaC**) desarrollada por nuestro equipo de trabajo para el despliegue de un **Learning Management System (LMS)**.  
-El objetivo principal es automatizar el aprovisionamiento, configuración y administración de los recursos necesarios para garantizar un entorno escalable, seguro y altamente disponible.
+Una institución educativa desea implementar un Learning Management System (LMS) similar a Canvas, que permita la interacción entre alumnos y profesores a través de una aplicación web. El sistema debe soportar funciones críticas como el envío de notificaciones a estudiantes, garantizar una alta disponibilidad y mantener la seguridad.
+
+Problema:
+La institución educativa necesita un LMS tipo Canvas. Actualmente no se garantiza la entrega rápida y confiable de notificaciones 
+a los alumnos, ni la disponibilidad continua del sistema. Además, el sistema debe cumplir con requisitos de calidad críticos:
+
+Justicacion
+Responder en 1–3s.
+Mantener disponibilidad del 99.9% las 24h.
+Soportar escalado automático.
+Estar distribuido en 2 zonas para tolerancia a fallos.
+Asegurar datos cifrados y protegidos contra ataques.
+Estar debidamente documentado para mantenimiento futuro
 
 ---
 
 ## 🚀 Tecnologías Utilizadas
+- **Docker en el backend y frontend**
+- **Docker hub**
 
 ### 🔹 Aprovisionamiento
 - **Terraform**: Herramienta para la creación, modificación y administración de infraestructura en múltiples proveedores.
-- **Nginx**: Servidor web utilizado en el despliegue inicial.
+- **Nginx**: Servidor web utilizado en el despliegue inicial*.
 
 ### 🔹 Configuración
 - **Ansible**: Automatización de la configuración de servidores, instalación de dependencias y despliegue de servicios.
 - **Balanceadores de carga**:  
-  - **Nginx**: Para la distribución básica de tráfico.  
-  - **HAProxy**: Para balanceo avanzado y alta disponibilidad.
+  - **Nginx**: Para la distribución básica de tráfico. 
+
+### 🔹 Versiones de aplicaciones
+Docker: v28.4.0
+Terraform v1.12.3
+Ansible v2.18.19
+
+
+
+
+### 🔹 Servicios de aws a utilizar a futuro:
+-WAF:Proteger contra el trafico malicioso
+-API GATEWAY
+-ALB:Balanceador de carga
+-VPC: Red virtual privada
+-AUTO SCALING: Ajustar la cantidad de instancias segun la demanda AGREGA/QUITA
+-FARGATE: ejecutar contenedores sin servidores
+-ECS(elastic container service): Coordinar y Gestionar multiples contenedores
+-SNS: Enviar notificaciones asincronas 
+-KMS: Gestion de claves de cifrado
+-IAM: Roles y usuarios
+-CLOUDWATCH: Configurar alarmas,logs y monitoreo con otros servicios
+-AURORA: Servicio de base de datos relacional: mysql y postgreSQL
+-AMAZON ELASTICACHE: Almacenar en memoria datos frecuentes "reducir la carga"
+
 
 ---
 
@@ -59,6 +95,14 @@ Antes de ejecutar el proyecto, asegúrate de tener instalados:
 * [Ansible](https://www.ansible.com/)
 * Editor recomendado: [Visual Studio Code](https://code.visualstudio.com/)
 
+Y tener estas extenciones en visual code:
+
+* Ansible
+* Container Tools
+* Docker
+* HashiCorp Terraform
+* YAML
+
 ---
 
 ## 📥 Clonar el Repositorio
@@ -73,7 +117,7 @@ Antes de ejecutar el proyecto, asegúrate de tener instalados:
   # Verificar ramas existentes
   git branch -a
 
-  # Entrar a la rama main
+  # Entrar a la rama main o elegir la rama a clonar 
   git checkout main
 
 ```
@@ -111,28 +155,12 @@ docker run -d -p 3000:3000 backend-lms
 
 ## 🎨 Frontend (HTML + Docker)
 
-### Ejecución local
-
-```bash
-# Acceder al directorio frontend
-cd frontend
-
-# Abrir el archivo en un navegador
-open index.html   # MacOS
-xdg-open index.html   # Linux
-start index.html   # Windows
-```
-
-### Ejecución con Docker
-
 ```bash
 # Construir la imagen
 docker build -t frontend-lms .
-
 # Ejecutar el contenedor
 docker run -d -p 8080:80 frontend-lms
 ```
-
 El frontend estará disponible en `http://localhost:8080`.
 
 ---
@@ -143,7 +171,7 @@ El frontend estará disponible en `http://localhost:8080`.
 
 ```bash
 # Acceder al directorio de Terraform
-cd infra/terraform
+cd IaC-Learning-Management-System/terraform
 
 # Inicializar Terraform
 terraform init
@@ -165,7 +193,7 @@ terraform destroy -auto-approve
 
 ```bash
 # Acceder al directorio Ansible
-cd ../ansible
+cd IaC-Learning-Management-System/ansible
 
 # Ejecutar el playbook
 ansible-playbook playbook.yaml -i inventario.ini
@@ -176,7 +204,7 @@ ansible-playbook playbook.yaml -i inventario.ini
 ## 👥 Autores
 
 * **Universidad Privada Antenor Orrego** 
-* Curso: *Infraestructura como codigo*
+* Curso: Infraestructura como codigo
 * Integrantes:
     - Eustaquio Avila, Joel
     - Vergara López, Junior
