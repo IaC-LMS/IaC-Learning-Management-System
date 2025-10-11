@@ -1,12 +1,15 @@
-FROM node:18
+# 1. Usamos una imagen base de Node.js
+FROM node:18-alpine
 
-WORKDIR /usr/src/app
+# 2. Creamos un directorio dentro del contenedor
+WORKDIR /app
 
 COPY package*.json ./
+
 RUN npm install
 
 COPY . .
 
 EXPOSE 3000
 
-CMD ["node", "index.js"]
+CMD ["npm", "start"]
