@@ -15,14 +15,12 @@ variable "vpc_id" {
 variable "db_user" {
   type        = string
   description = "Usuario maestro de Aurora."
-  # Valor: 'admin'
   default     = "admin"
 }
 
 variable "db_password" {
   type        = string
   description = "Contraseña maestra de Aurora (¡Sensible!)."
-  # NOTA: Por seguridad, se declara como sensible. Su valor debe pasarse 
   sensitive   = true 
 }
 

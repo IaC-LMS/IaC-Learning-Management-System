@@ -9,6 +9,5 @@ terraform {
 }
 
 provider "aws" {
-  # Usamos la variable de región definida en variables.tf
   region = var.aws_region 
 }
